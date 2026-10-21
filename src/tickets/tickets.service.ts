@@ -32,7 +32,47 @@ export class TicketsService {
     },
   ];
 
-  findAll() {
-    return this.tickets;
+  private nextDataId = 4;
+
+  findAll(status?: Ticket['status'], priority?: Ticket['priority']): Ticket[] {
+    let tickets = this.tickets;
+
+    if (status) {
+      tickets = tickets.filter((ticket) => ticket.status === status);
+    }
+
+    if (priority) {
+      tickets = tickets.filter((ticket) => ticket.priority === priority);
+    }
+
+    if (tickets.length === 0) {
+      throw new Error('No tickets found');
+    }
+
+    return tickets;
+  }
+
+  findOne(id: number): Ticket {
+    const ticket = this.tickets.find((ticket) => ticket.id === id);
+
+    if (!ticket) {
+      throw new Error(`Ticket with id ${id} not found`);
+    }
+
+    return ticket;
+  }
+
+  create(payload: Omit<Ticket, 'id' | 'status' | 'createdAt'>): Ticket {
+    const ticket: Ticket = {
+      id: this.nextDataId++,
+      subject: payload.subject,
+      description: payload.description,
+      priority: payload.priority,
+      status: 'open',
+      createdAt: new Date().toISOString(),
+    };
+
+    this.tickets.push(ticket);
+    return ticket;
   }
 }
