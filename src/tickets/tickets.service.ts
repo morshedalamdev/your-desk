@@ -76,4 +76,24 @@ export class TicketsService {
     this.tickets.push(ticket);
     return ticket;
   }
+
+  update(id: number, updateDto: Partial<CreateTicketDto>): Ticket {
+    const ticket = this.findOne(id);
+    if (ticket.status === 'closed') {
+      throw new Error(`Ticket with id ${id} is closed and cannot be updated`);
+    }
+
+    Object.assign(ticket, updateDto);
+    return ticket;
+  }
+
+  closeTicket(id: number): Ticket {
+    const ticket = this.findOne(id);
+    if (ticket.status === 'closed') {
+      throw new Error(`Ticket with id ${id} is already closed`);
+    }
+
+    ticket.status = 'closed';
+    return ticket;
+  }
 }
