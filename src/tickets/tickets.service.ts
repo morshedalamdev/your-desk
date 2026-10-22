@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Ticket } from './ticket.interface';
+import { CreateTicketDto } from './dto/create-ticket.dto';
 
 @Injectable()
 export class TicketsService {
@@ -62,12 +63,12 @@ export class TicketsService {
     return ticket;
   }
 
-  create(payload: Omit<Ticket, 'id' | 'status' | 'createdAt'>): Ticket {
+  create(createDto: CreateTicketDto): Ticket {
     const ticket: Ticket = {
       id: this.nextDataId++,
-      subject: payload.subject,
-      description: payload.description,
-      priority: payload.priority,
+      subject: createDto.subject,
+      description: createDto.description,
+      priority: createDto.priority,
       status: 'open',
       createdAt: new Date().toISOString(),
     };

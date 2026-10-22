@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { Ticket } from './ticket.interface';
+import { CreateTicketDto } from './dto/create-ticket.dto';
 
 @Controller('tickets')
 export class TicketsController {
@@ -28,7 +29,7 @@ export class TicketsController {
   }
 
   @Post()
-  create(@Body() payload: Omit<Ticket, 'id' | 'status' | 'createdAt'>) {
-    return this.ticketsService.create(payload);
+  create(@Body() createDto: CreateTicketDto) {
+    return this.ticketsService.create(createDto);
   }
 }
